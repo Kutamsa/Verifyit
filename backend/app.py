@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import tempfile
 import os
+import uvicorn
 from dotenv import load_dotenv
 from openai import OpenAI
 from fastapi.responses import JSONResponse
@@ -10,6 +11,8 @@ import base64
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+print("OPENAI_API_KEY:", OPENAI_API_KEY)
+
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -117,3 +120,8 @@ async def factcheck_image(
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # Use PORT env var or default 8000 for local testing
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
