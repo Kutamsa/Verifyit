@@ -22,7 +22,7 @@ async function submitText() {
     loadingSpinner.style.display = "inline-block";
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/factcheck/text", {
+        const response = await fetch("https://verifyit-backend.onrender.com/factcheck/text", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text: input }),
@@ -53,7 +53,7 @@ async function uploadAudio() {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 30000);
 
-        const response = await fetch("http://127.0.0.1:8000/factcheck/audio", {
+        const response = await fetch("https://verifyit-backend.onrender.com/factcheck/audio", {
             method: "POST",
             body: formData,
             signal: controller.signal,
@@ -97,7 +97,7 @@ async function toggleRecording() {
             loadingSpinner.style.display = "inline-block";
 
             try {
-                const response = await fetch("http://127.0.0.1:8000/factcheck/audio", {
+                const response = await fetch("https://verifyit-backend.onrender.com/factcheck/audio", {
                     method: "POST",
                     body: formData,
                 });
@@ -142,7 +142,7 @@ async function uploadImage() {
     loadingSpinner.style.display = "inline-block";
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/factcheck/image", {
+        const response = await fetch("https://verifyit-backend.onrender.com/factcheck/image", {
             method: "POST",
             body: formData,
         });
