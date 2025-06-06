@@ -34,18 +34,8 @@ def root():
 
 @app.post("/factcheck/text")
 async def factcheck_text(input: TextInput):
-    prompt = f"Fact-check this text and provide a clear answer:\n\n{input.text}"
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "You're a helpful fact-checking assistant."},
-                {"role": "user", "content": prompt}
-            ]
-        )
-        return {"result": response.choices[0].message.content}
-    except Exception as e:
-        return {"error": str(e)}
+    return {"result": f"Received text: {input.text}"}
+
 
 @app.post("/factcheck/audio")
 async def factcheck_audio(file: UploadFile = File(...)):
