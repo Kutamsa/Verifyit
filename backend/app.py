@@ -1,21 +1,29 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 import tempfile
 import os
 import uvicorn
 from dotenv import load_dotenv
 from openai import OpenAI
-from fastapi.responses import JSONResponse
 import base64
-
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 app = FastAPI()
+
+# Serve static frontend files
+frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend")
+app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+
+# Serve index.html at root URL
+@app.get("/")
+def serve_index():
+    index_file_path = os.path.join(frontend_path, "index.html")
+    return FileResponse(index_file_path)
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,16 +35,12 @@ app.add_middleware(
 class TextInput(BaseModel):
     text: str
 
-@app.get("/")
-def root():
-    return {"message": "Verify It backend is running!"}
-
 @app.post("/factcheck/text")
 async def factcheck_text(input: TextInput):
     prompt = f"Fact-check this text and provide a clear answer:\n\n{input.text}"
     try:
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "You're a helpful fact-checking assistant."},
                 {"role": "user", "content": prompt}
@@ -64,7 +68,7 @@ async def factcheck_audio(file: UploadFile = File(...)):
 
         prompt = f"Fact-check this audio content (transcribed):\n\n{text}"
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "You're a Telugu fact-checking assistant."},
                 {"role": "user", "content": prompt}

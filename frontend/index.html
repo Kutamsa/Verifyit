@@ -4,57 +4,76 @@
 <head>
     <meta charset="UTF-8">
     <title>Verify It</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="/static/script.js" defer></script>
+
 </head>
 
-<body
-    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: black; font-family: Arial, sans-serif;">
-    <div class="container" style="max-width: 800px; margin: auto; padding: 20px;">
-        <h1 style="font-size: 3rem; text-align: center;">🔍Verifyit</h1>
-        <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">Fact-Checking Made Simple</p>
+<body>
+    <div class="header-full">
+        <h1 class="main-title">🔍Verifyit </h1>
+        <p class="subtitle">Fact-Checking Made Simple</p>
+    </div>
 
-        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
-            <button onclick="showMode('voiceMode')">🎤 Voice Mode</button>
-            <button onclick="showMode('textMode')">📝 Text Mode</button>
-            <button onclick="showMode('imageMode')">🖼️ Image Mode</button>
-        </div>
+    <div class="layout single-panel">
+        <div class="left-panel centered-panel">
+            <div class="module-box">
+                <h2 class="section-title">Verifying Module</h2>
+                <p class="section-sub">Choose fact-checking method:</p>
+                <div class="mode-buttons-row">
+                    <button onclick="showMode('voiceMode')">🎤 Voice mode</button>
+                    <button onclick="showMode('textMode')">📝 Text Input</button>
+                    <button onclick="showMode('imageMode')">🖼️ Image Upload</button>
+                </div>
 
-        <!-- VOICE MODE -->
-        <div id="voiceMode" style="display:none;">
-            <h2>Click below to start recording</h2>
-            <button id="recordBtn" onclick="toggleRecording()">🎤 Start Recording</button>
-            <audio id="player" controls style="display:none; margin-top: 10px;"></audio>
-            <br>
-            <input type="file" id="audioInput" accept="audio/*">
-            <button onclick="uploadAudio()">Fact Check</button>
-            <button onclick="removeAudioFile()">❌ Remove File</button>
-        </div>
+                <!-- VOICE MODE -->
+                <div id="voiceMode" class="mode-section" style="display:none;">
+                    <div class="record-btn-wrapper">
+                        <button id="recordBtn" onclick="toggleRecording()" class="record-circle">🎤</button>
+                        <div id="recordLabel" class="record-label">Click to start recording</div>
+                    </div>
 
-        <!-- TEXT MODE -->
-        <div id="textMode" style="display:none;">
-            <textarea id="inputText" placeholder="Paste or type text to fact-check..."
-                style="width:100%; height: 100px;"></textarea>
-            <button onclick="submitText()">Fact Check</button>
-        </div>
+                    <audio id="player" controls style="display:none; margin-top: 10px;"></audio>
+                    <div class="file-row">
+                        <input type="file" id="audioInput" accept="audio/*">
+                        <span class="trash-icon" onclick="removeAudioFile()">🗑️</span>
+                    </div>
+                    <button onclick="uploadAudio()">Fact Check</button>
+                    <div id="transcriptionBox" class="result-text" style="display: none;">
+                        <h3>🗣️ Transcription</h3>
+                        <p id="transcriptionText">(No transcription yet)</p>
+                    </div>
 
-        <!-- IMAGE MODE -->
-        <div id="imageMode" style="display:none;">
-            <input type="file" id="imageInput" accept="image/*">
-            <input type="text" id="captionInput" placeholder="Enter a caption or question...">
-            <button onclick="uploadImage()">Fact Check</button>
-            <button onclick="removeImageFile()">❌ Remove File</button>
-        </div>
 
-        <div id="transcriptionBox" style="margin-top: 20px; font-weight: bold;"></div>
-        <div id="loadingSpinner" style="display:none; margin-top: 10px;">⏳ Loading...</div>
+                </div>
 
-        <div id="resultBox" style="margin-top: 20px;">
-            <h3>Result:</h3>
-            <p id="resultOutput">...</p>
+                <!-- TEXT MODE -->
+                <div id="textMode" class="mode-section" style="display:none;">
+                    <textarea id="inputText" placeholder="Paste or type text to fact-check..." rows="4"></textarea>
+                    <button onclick="submitText()">Fact Check</button>
+                </div>
+
+                <!-- IMAGE MODE -->
+                <div id="imageMode" class="mode-section" style="display:none;">
+                    <div class="file-row">
+                        <input type="file" id="imageInput" accept="image/*">
+                        <span class="trash-icon" onclick="removeImageFile()">🗑️</span>
+                    </div>
+                    <input type="text" id="captionInput" placeholder="Enter a caption or question...">
+                    <button onclick="uploadImage()">Fact Check</button>
+                </div>
+
+
+                <div id="loadingSpinner" style="display:none;">⏳ Loading...</div>
+
+                <div id="resultBox" class="result-text">
+                    <h3>✅ Fact Check Result</h3>
+                    <p id="resultOutput">Fact checked results will appear here...</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
 </body>
 
 </html>

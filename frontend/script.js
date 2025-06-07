@@ -3,6 +3,10 @@ const resultOutput = document.getElementById("resultOutput");
 const transcriptionBox = document.getElementById("transcriptionBox");
 const loadingSpinner = document.getElementById("loadingSpinner");
 
+const BASE_URL = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
+    ? "http://127.0.0.1:8000"
+    : "https://verifyit-backend-vkmt.onrender.com";
+
 const modes = ["voiceMode", "textMode", "imageMode"];
 
 function showMode(modeId) {
@@ -22,7 +26,7 @@ async function submitText() {
     loadingSpinner.style.display = "inline-block";
 
     try {
-        const response = await fetch("https://verifyit-backend-vkmt.onrender.com/factcheck/text", {
+        const response = await fetch(`${BASE_URL}/factcheck/text`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text: input }),
@@ -53,7 +57,7 @@ async function uploadAudio() {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 30000);
 
-        const response = await fetch("https://verifyit-backend-vkmt.onrender.com/factcheck/audio", {
+        const response = await fetch(`${BASE_URL}/factcheck/audio`, {
             method: "POST",
             body: formData,
             signal: controller.signal,
@@ -97,7 +101,7 @@ async function toggleRecording() {
             loadingSpinner.style.display = "inline-block";
 
             try {
-                const response = await fetch("https://verifyit-backend-vkmt.onrender.com/factcheck/audio", {
+                const response = await fetch(`${BASE_URL}/factcheck/audio`, {
                     method: "POST",
                     body: formData,
                 });
@@ -113,11 +117,13 @@ async function toggleRecording() {
 
         mediaRecorder.start();
         isRecording = true;
-        recordBtn.textContent = "⏹ Stop Recording";
+        recordBtn.textContent = "⏹"; // Just the stop icon
+        document.getElementById("recordLabel").textContent = "Stop recording";
     } else {
         mediaRecorder.stop();
         isRecording = false;
-        recordBtn.textContent = "🎤 Start Recording";
+        recordBtn.textContent = "🎤";
+        document.getElementById("recordLabel").textContent = "Click to start recording";
     }
 }
 
@@ -142,7 +148,7 @@ async function uploadImage() {
     loadingSpinner.style.display = "inline-block";
 
     try {
-        const response = await fetch("https://verifyit-backend-vkmt.onrender.com/factcheck/image", {
+        const response = await fetch(`${BASE_URL}/factcheck/image`, {
             method: "POST",
             body: formData,
         });
